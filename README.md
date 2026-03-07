@@ -1,2 +1,2 @@
 # neovim
-Custom neovim environment config. 
+Custom neovim environment config.
