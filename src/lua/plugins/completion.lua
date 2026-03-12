@@ -1,13 +1,23 @@
 return {
 	{
+		url = "rafamadriz/friendly-snippets",
+		lazy = false,
+	},
+	{
 		url = "saghen/blink.cmp",
-		lazy = true,
+		lazy = false,
 		config = function()
-			-- Setup autocompletion
+			-- Setup package
 			local cmp = require("blink.cmp")
-			cmp.setup()
+			cmp.setup({
+				fuzzy = {
+					prebuilt_binaries = {
+						force_version = true,
+					},
+				},
+			})
 
-			-- Set tab completion
+			-- Shortcuts
 			vim.keymap.set("i", "<Tab>", function()
 				if cmp.is_visible() then
 					return cmp.select_and_accept()

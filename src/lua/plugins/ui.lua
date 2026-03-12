@@ -1,9 +1,16 @@
 return {
 	{
-		url = "rebelot/kanagawa.nvim",
+		url = "folke/tokyonight.nvim",
 		lazy = false,
 		config = function()
-			vim.cmd("colorscheme kanagawa")
+			-- Setup package
+			require("tokyonight").setup({
+				style = "moon",
+				transparent = true,
+			})
+
+			-- Manage theme
+			vim.cmd("colorscheme tokyonight")
 		end,
 	},
 }

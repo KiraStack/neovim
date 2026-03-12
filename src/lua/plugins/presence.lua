@@ -1,6 +1,6 @@
 return {
 	{
-		url = "OXY2DEV/markview.nvim",
+		url = "vyfor/cord.nvim",
 		lazy = false,
 	},
 }

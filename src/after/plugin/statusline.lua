@@ -22,3 +22,6 @@ function _G.statusline()
 		"%P", -- percentage through file
 	}, " ")
 end
+
+-- Hide statusline background
+vim.cmd("hi StatusLine guibg=NONE ctermbg=NONE")
