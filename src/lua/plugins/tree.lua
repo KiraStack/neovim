@@ -20,7 +20,7 @@ return {
 			vim.g.NERDTreeShowHidden = 1 -- show hidden files
 			vim.g.NERDTreeHijackNetrw = 1 -- manage netrw
 
-			-- Shortcuts
+			-- Setup keymap for opening tree
 			vim.keymap.set("n", "<Leader>e", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
 		end,
 	},

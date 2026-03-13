@@ -6,7 +6,7 @@ local on_attach = function(client, bufnr)
 	-- Enable LSP-based completion
 	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-	-- Buffer-local keymaps
+	-- Setup keymaps
 	local opts = { noremap = true, silent = true }
 	vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)

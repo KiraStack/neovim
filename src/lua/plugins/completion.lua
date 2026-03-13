@@ -17,7 +17,7 @@ return {
 				},
 			})
 
-			-- Shortcuts
+			-- Setup keymap for completions
 			vim.keymap.set("i", "<Tab>", function()
 				if cmp.is_visible() then
 					return cmp.select_and_accept()

@@ -28,14 +28,13 @@ if handle then
 		if kind == "file" and file:match("%.lua$") and file ~= "init.lua" then
 			-- Load the plugin
 			local name = file:gsub("%.lua$", "") -- strip file ext.
-			local ok, tbl = pcall(require, "plugins." .. name)
+			local ok, res = pcall(require, "plugins." .. name)
 
 			-- Check if the plugin could be loaded
-			if ok and type(tbl) == "table" then
-				vim.list_extend(packages, tbl) -- merge the plugin table
-				print("Loaded '" .. name .. "'")
+			if ok and type(res) == "table" then
+				vim.list_extend(packages, res) -- merge the plugin table
 			else
-				print("ERROR: failed to require plugin module: '" .. name .. "'")
+				error(res)
 			end
 		end
 	end
@@ -93,4 +92,4 @@ for i, package in ipairs(packages) do
 end
 
 -- Write formatted string to console
-print("Recognised", #packages, "package[s].")
+print("Recognised", #packages, "packages.")
