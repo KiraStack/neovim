@@ -27,51 +27,63 @@ local formatters = {
 }
 
 -- Formatters for each filetype
-local formatconf = {
-	lua = formatters.stylua,
-	python = formatters.black,
-	sh = formatters.shfmt,
-	c = formatters.clang_format,
-	cpp = formatters.clang_format,
-	javascript = formatters.prettierd,
-	javascriptreact = formatters.prettierd,
-	typescript = formatters.prettierd,
-	typescriptreact = formatters.prettierd,
-	html = formatters.prettierd,
-	css = formatters.prettierd,
-	json = formatters.prettierd,
-	yaml = formatters.prettierd,
+local formatconf = {}
+
+-- Filetypes that use the `prettier` formatter
+local prettierd_files = {
+	"javascript",
+	"javascriptreact",
+	"typescript",
+	"typescriptreact",
+	"html",
+	"css",
+	"json",
+	"yaml",
 }
 
--- Return the module
-return {
-	format = function(opts)
-		opts = opts or {}
-		local ft = vim.bo.filetype
-		local conf = formatconf[ft]
-		if not conf then
-			vim.notify("No formatter configured for filetype: " .. ft, vim.log.levels.WARN)
-			return
-		end
+-- Add grouped filetypes
+for _, ft in ipairs(prettierd_files) do
+	formatconf[ft] = formatters.prettierd
+end
 
-		local fmt_opts = conf()
-		fmt_opts = vim.islist(fmt_opts) and fmt_opts or { fmt_opts }
+-- Add other filetypes
+formatconf.c = formatters.clang_format
+formatconf.cpp = formatters.clang_format
+formatconf.lua = formatters.stylua
+formatconf.python = formatters.black
+formatconf.sh = formatters.shfmt
 
-		for _, o in ipairs(fmt_opts) do
-			local buf = 0
-			local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-			local sysopts = { stdin = lines, text = true, cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(buf)) }
-			vim.system(
-				o.cmd,
-				sysopts,
-				vim.schedule_wrap(function(out)
-					if out.code == 0 then
-						vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(out.stdout, "\n"))
-					else
-						vim.notify(string.format("Formatting failed: %s", out.stderr), vim.log.levels.ERROR)
-					end
-				end)
-			)
-		end
-	end,
-}
+-- Global formatting function to format the current buffer
+-- using the configured formatter
+function _G.format()
+	local buf = 0
+	local ft = vim.bo.filetype
+	local conf = formatconf[ft]
+
+	if not conf then
+		vim.notify("'" .. (ft == "" and "txt" or ft) .. "' is not supported.", vim.log.levels.ERROR)
+		return
+	end
+
+	local opts = conf(buf)
+	opts = vim.islist(opts) and opts or { opts }
+
+	local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+	local cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(buf))
+
+	for _, o in ipairs(opts) do
+		local sysopts = { stdin = lines, text = true, cwd = cwd }
+
+		vim.system(
+			o.cmd,
+			sysopts,
+			vim.schedule_wrap(function(out)
+				if out.code == 0 then
+					vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(out.stdout, "\n"))
+				else
+					vim.notify(string.format("Formatting failed: %s", out.stderr), vim.log.levels.ERROR)
+				end
+			end)
+		)
+	end
+end

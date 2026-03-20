@@ -1,6 +1,0 @@
-return {
-	{
-		url = "OXY2DEV/markview.nvim",
-		lazy = false,
-	},
-}

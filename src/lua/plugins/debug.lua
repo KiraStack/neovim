@@ -30,11 +30,11 @@ return {
 				},
 				codelldb = {
 					type = "server",
-                    port = "${port}",
-                    executable = {
-                        command = "/nix/store/yc2apx8zcx7hzj44vayijwxv050ylvdh-lldb-11.1.0/bin/lldb-vscode",
-                        args = { "--port", "${port}" },
-                    },
+					port = "${port}",
+					executable = {
+						command = "/nix/store/yc2apx8zcx7hzj44vayijwxv050ylvdh-lldb-11.1.0/bin/lldb-vscode",
+						args = { "--port", "${port}" },
+					},
 				},
 				cppdbg = {
 					id = "cppdbg",
@@ -48,14 +48,14 @@ return {
 				c = {
 					{
 						name = "Launch (codelldb)",
-                        type = "codelldb",
-                        request = "launch",
-                        program = function()
-                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-                        end,
-                        cwd = vim.fn.getcwd(),
-                        stopOnEntry = false,
-                        args = {},
+						type = "codelldb",
+						request = "launch",
+						program = function()
+							return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+						end,
+						cwd = vim.fn.getcwd(),
+						stopOnEntry = false,
+						args = {},
 					},
 					{
 						name = "Attach (codelldb)",

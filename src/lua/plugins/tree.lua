@@ -1,27 +1,27 @@
 return {
-	-- {
-	-- 	url = "nvim-tree/nvim-web-devicons",
-	-- 	lazy = false,
-	-- },
 	{
-		url = "preservim/nerdtree",
+		url = "stevearc/oil.nvim",
 		lazy = false,
 		config = function()
-			-- Disable 'netrw' at startup
-			-- vim.g.loaded_netrw = 1
-			-- vim.g.loaded_netrwPlugin = 1
-
 			-- Setup package
-			-- require("nvim-tree").setup()
+			require("oil").setup({
+				default_file_explorer = true,
+				delete_to_trash = true,
+				skip_confirm_for_simple_edits = true,
+				view_options = {
+					show_hidden = true,
+					natural_order = true,
+					is_always_hidden = function(name, data)
+						return name == ".." or name == ".git"
+					end,
+				},
+				win_options = {
+					wrap = true,
+				},
+			})
 
-			-- Options
-			vim.g.NERDTreeDirArrows = 1 -- nice arrows
-			-- vim.g.NERDTreeMinimalUI = 1 -- debloat (disabled for appearance reasons)
-			vim.g.NERDTreeShowHidden = 1 -- show hidden files
-			vim.g.NERDTreeHijackNetrw = 1 -- manage netrw
-
-			-- Setup keymap for opening tree
-			vim.keymap.set("n", "<Leader>e", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
+			-- Setup keymaps
+			vim.keymap.set("n", "<leader>e", ":Oil<CR>", { desc = "Open file explorer" })
 		end,
 	},
 }
