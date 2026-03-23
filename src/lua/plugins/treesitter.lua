@@ -3,22 +3,26 @@ return {
 		url = "nvim-treesitter/nvim-treesitter",
 		lazy = false,
 		config = function()
-			-- Setup package
-			require("nvim-treesitter").install({ "c", "cpp", "nix", "python" })
+			local lspconfig = require("lspconfig")
+			local langservers = { "clangd" }
+
+			-- Configure treesitter
 			require("nvim-treesitter.configs").setup({
-				ensure_installed = "all", -- or list filetypes
+				ensure_installed = { "c", "cpp", "nix" }, -- "all"
 				highlight = { enable = true },
 				incremental_selection = { enable = true },
 				indent = { enable = true },
 			})
 
-			-- Enable treesitter for all file types
-			vim.api.nvim_create_autocmd("FileType", {
-				group = vim.api.nvim_create_augroup("UserTreesitterConfig", { clear = true }),
-				callback = function()
-					pcall(vim.treesitter.start)
-				end,
-			})
+			-- Configure language servers
+			for _, server in ipairs(langservers) do
+				lspconfig[server].setup({
+					on_attach = function(client, bufnr)
+						vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+					end,
+					flags = { debounce_text_changes = 150 },
+				})
+			end
 		end,
 	},
 }

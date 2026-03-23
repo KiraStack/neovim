@@ -1,3 +1,5 @@
+local icons = require("utils.icons")
+
 return {
 	{
 		url = "rafamadriz/friendly-snippets",
@@ -10,11 +12,16 @@ return {
 			-- Setup package
 			local cmp = require("blink.cmp")
 			cmp.setup({
-				fuzzy = {
-					prebuilt_binaries = {
-						force_version = true,
-					},
+				keymap = { preset = "default" },
+				appearance = { nerd_font_variant = "normal" },
+				completion = {
+					documentation = { auto_show = true },
 				},
+				sources = {
+					default = { "lsp", "path", "snippets", "buffer" },
+				},
+				fuzzy = { implementation = "lua" },
+				kind_icons = icons,
 			})
 
 			-- Setup keymap for completions
